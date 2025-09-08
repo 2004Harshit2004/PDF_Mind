@@ -1,27 +1,11 @@
 streamlit>=1.49
 pypdf>=4.0.0
+langchain>=0.3.0
+langchain-core>=0.3.0
+langchain-community>=0.3.0
 langchain-chroma>=0.2.0
 langchain-google-genai>=2.1.0
-langchain-community>=0.3.0
-langchain-core>=0.3.0
-langchain>=0.3.0
+langchain-text-splitters>=0.3.0
+chromadb>=1.0.0
+pyarrow>=15.0.0
 python-dotenv>=1.1.1
-```
-**Explanation of changes:**
-
-* **Removed Local Paths:** All lines starting with `file:///` or referencing local build directories have been removed. These are not portable and cause deployment failures.
-* **Removed Unnecessary Dependencies:** The original list had over 100 packages, many of which are dependencies of other packages (e.g., `attrs`, `cffi`, `numpy`, `urllib3`). `pip` will automatically install these when it installs the packages listed above.
-* **Added Version Ranges:** By specifying version ranges (e.g., `streamlit>=1.49`), you prevent potential dependency conflicts and ensure your app is using a compatible version.
-* **Included Core Packages:** I've explicitly included `langchain`, `langchain-core`, and `langchain-community`, as they are essential for your application's logic.
-
-**Next Steps:**
-1.  Replace the contents of your `requirements.txt` file with the clean list provided above.
-2.  Commit this change to your Git repository.
-    ```bash
-    git add requirements.txt
-    git commit -m "Fix: Cleaned and simplified requirements.txt for deployment"
-    ```
-3.  Push the changes to your GitHub repository.
-    ```bash
-    git push origin main
-    
