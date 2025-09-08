@@ -1,0 +1,7 @@
+.env
+.vscode
+chroma_db
+data
+myenv
+.ipynb_checkpoints
+__pycache__/
