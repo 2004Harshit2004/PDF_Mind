@@ -9,3 +9,6 @@ langchain-text-splitters>=0.3.0
 chromadb>=1.0.0
 pyarrow>=15.0.0
 python-dotenv>=1.1.1
+pypdf
+huggingface
+langchain-huggingface
