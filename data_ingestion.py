@@ -6,6 +6,12 @@ from langchain_huggingface import HuggingFaceEndpointEmbeddings
 from dotenv import load_dotenv
 from tempfile import NamedTemporaryFile
 
+import sqlite3
+import sys
+
+# Force Chroma to use the default sqlite3
+sys.modules["pysqlite3"] = sqlite3
+
 
 # cofiguration setup
 import getpass
