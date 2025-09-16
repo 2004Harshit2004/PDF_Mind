@@ -1,17 +1,12 @@
-from langchain_community.document_loaders import PyPDFLoader
 from langchain_community.chat_message_histories import StreamlitChatMessageHistory
-from langchain.text_splitter import RecursiveCharacterTextSplitter
-from langchain_chroma import Chroma
-from langchain_huggingface import HuggingFaceEndpointEmbeddings
 from langchain_google_genai import ChatGoogleGenerativeAI
 from langchain.chains.combine_documents import create_stuff_documents_chain
 from langchain.chains import create_retrieval_chain
 from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
 from langchain_core.runnables.history import RunnableWithMessageHistory
-from tempfile import NamedTemporaryFile
+
 
 import asyncio
-
 try:
     asyncio.get_running_loop()
 except RuntimeError:
@@ -40,46 +35,30 @@ google_api_key=os.getenv('GEMINI_API_KEY')
 ## File Uploader
 uploaded_file = st.file_uploader("Choose a PDF file", type="pdf")
 
-
+## Importing create vector store function through data_ingestion.py
+from data_ingestion import create_vector_store
 
 @st.cache_resource(show_spinner=False)
-def create_vector_store(file):
-    with NamedTemporaryFile(delete=False, suffix=".pdf") as temp_file:
-        temp_file.write(file.getvalue())
-        temp_path = temp_file.name
-
+def get_or_create_vector_store(file):
+    """
+    A wrapper function to apply caching to the create_vector_store function.
+    """
     with st.spinner("Processing PDF..."):
-        # Load the PDF document from the temporary file
-        loader = PyPDFLoader(temp_path)
-        docs = loader.load()
-        # Split the documents into chunks
-        splitter = RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=200)
-        chunks = splitter.split_documents(docs)
+        try:
+            vector_store = create_vector_store(file, hugging_face_api)
+            st.success("PDF processed successfully!")
+            return vector_store
+        except ValueError as e:
+            st.error(str(e))
+            return None
 
-
-        # Create the embedding model
-        embeddings = HuggingFaceEndpointEmbeddings(
-            model="sentence-transformers/all-mpnet-base-v2",
-            task="feature-extraction",
-            huggingfacehub_api_token=hugging_face_api,
-        )
-
-        # Create the vector store from chunks
-        vector_store = Chroma.from_documents(
-            documents=chunks,
-            embedding=embeddings,
-            collection_name="uploaded_pdf_collection",
-            persist_directory="chroma_db",
-        )
-        st.success("PDF processed successfully!")
-    return vector_store
 
 
 
 # Handle file upload
 if uploaded_file:
     # Use the cached function to get the vector store
-    vector_store = create_vector_store(uploaded_file)
+    vector_store = get_or_create_vector_store(uploaded_file)
     retriever = vector_store.as_retriever()
 
     #3. RAG CHAIN SETUP (moved inside the conditional block)
