@@ -1,3 +1,12 @@
+
+
+import sqlite3
+import sys
+
+# Force Chroma to use the default sqlite3
+sys.modules["pysqlite3"] = sqlite3
+
+
 from langchain_community.chat_message_histories import StreamlitChatMessageHistory
 from langchain_google_genai import ChatGoogleGenerativeAI
 from langchain.chains.combine_documents import create_stuff_documents_chain

@@ -1,3 +1,10 @@
+
+import sqlite3
+import sys
+
+# Force Chroma to use the default sqlite3
+sys.modules["pysqlite3"] = sqlite3
+
 from langchain_community.document_loaders import PyPDFLoader
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain_google_genai import GoogleGenerativeAIEmbeddings
@@ -6,11 +13,6 @@ from langchain_huggingface import HuggingFaceEndpointEmbeddings
 from dotenv import load_dotenv
 from tempfile import NamedTemporaryFile
 
-import sqlite3
-import sys
-
-# Force Chroma to use the default sqlite3
-sys.modules["pysqlite3"] = sqlite3
 
 
 # cofiguration setup
