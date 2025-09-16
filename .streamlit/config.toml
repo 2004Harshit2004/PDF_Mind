@@ -1,30 +1,5 @@
 
-[tool.poetry]
-name = "pdf-mind"
-version = "0.1.0"
-description = ""
-authors = ["Your Name <you@example.com>"]
-
-[tool.poetry.dependencies]
-python = "3.11" # This is the key line to add
-
-[tool.poetry.group.dev.dependencies]
-ipykernel = "^6.29.5"
-
-[build-system]
-requires = ["poetry-core"]
-build-backend = "poetry.core.masonry.api"
-```
-**Important:** This file tells Streamlit to explicitly use Python **3.11**, which has excellent compatibility with all the libraries in your project.
-
-### Step 2: Push the Changes to GitHub
-
-1.  Add the new `.streamlit` folder and its `config.toml` file to your Git repository.
-    ```bash
-    git add .streamlit/config.toml
-    git commit -m "feat: Add Streamlit config to use Python 3.11 for deployment"
-    ```
-2.  Push your changes to the remote repository.
-    ```bash
-    git push origin main
-    
+[server]
+# This explicitly tells Streamlit Community Cloud to use a stable Python version.
+# Python 3.11 is a good choice as it has broad compatibility with many libraries.
+pythonVersion = "3.11"
